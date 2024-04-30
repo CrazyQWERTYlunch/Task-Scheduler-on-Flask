@@ -16,7 +16,7 @@ TaskSchedule - это веб-приложение для управления з
 ### 1. Скачивание с GitHub
 Сначала необходимо скачать репозиторий с GitHub. Выполните команду:
 ```bash
-git clone https://github.com/your_username/TaskSchedule.git
+git clone https://github.com/CrazyQWERTYlunch/Task-Scheduler-on-Flask.git
 ```
 
 ### 2. Установка зависимостей
