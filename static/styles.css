@@ -1,0 +1,30 @@
+/* styles.css */
+.card-container {
+    margin-top: 20px;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-buttons {
+    display: flex;
+}
+
+.card-buttons button {
+    margin-left: 5px;
+}

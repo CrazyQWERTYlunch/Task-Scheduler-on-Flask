@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mb-4">Профиль пользователя</h2>
+            <div class="profile-info">
+                <p><strong>Имя пользователя:</strong> {{ current_user.username }}</p>
+                <p><strong>Email:</strong> {{ current_user.email }}</p>
+            </div>
+            <!-- Кнопка "Сменить пароль" -->
+            <button id="changePasswordBtn" class="btn btn-primary">Сменить пароль</button>
+
+            <!-- Форма смены пароля -->
+            <form id="changePasswordForm" method="POST" action="{{ url_for('user.change_password') }}" style="display: none;">
+                <div class="form-group mt-4">
+                    <label for="current_password">Текущий пароль</label>
+                    <input type="password" id="current_password" name="current_password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Новый пароль</label>
+                    <input type="password" id="new_password" name="new_password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Подтвердите пароль</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Сменить пароль</button>
+            </form>
+        </div>
+        <!-- Отдельное окошко со статистикой -->
+        <div class="col-md-6">
+            <div class="profile-stats">
+                <h2 class="mb-4">Статистика пользователя</h2>
+                <p><strong>Всего списков задач:</strong> {{ user_stats.total_todo }}</p>
+                <p><strong>Всего задач:</strong> {{ user_stats.total_tasks }}</p>
+                <p><strong>Выполненных задач:</strong> {{ user_stats.completed_tasks }}</p>
+                <p><strong>Активных задач:</strong> {{ user_stats.active_tasks }}</p>
+                <p><strong>Проваленных задач:</strong> {{ user_stats.incomplete_tasks }}</p>
+                <p><strong>Процент выполненных задач:</strong> {{ user_stats.completion_percentage }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('changePasswordBtn').addEventListener('click', function() {
+        document.getElementById('changePasswordForm').style.display = 'block';
+    });
+</script>
+{% endblock %}

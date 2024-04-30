@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Мои задачи{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Задачи в списке "{{ todo_list.title }}"</h1>
+    <p>Всего задач: {{ all_tasks }}</p>
+    <p>Активные задачи: {{ active_tasks }}</p>
+    <p>Завершенные задачи: {{ completed_tasks }}</p>
+    {% if todo_list.tasks %}
+    <div class="card-container">
+        {% for task in todo_list.tasks %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ task.title }}</h5>
+                <p class="card-text">{{ task.description }}</p>
+                <p class="card-text">Дедлайн: {{ task.deadline_date }}</p>
+                {% if task.is_complete %}
+                    <span class="badge badge-success">Завершена. Выполнено: {{ task.completed_at }}</span>
+                {% else %}
+                    <span class="badge badge-secondary">Не завершена</span>
+                {% endif %}
+                <div class="card-buttons mt-2">
+                    <button class="btn btn-info edit-button" data-task-id="{{ task.id }}">Редактировать</button>
+                    <form action="{{ url_for('todo_list.task_delete', todo_id=todo_list.id) }}" method="post" style="display: inline;">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        <button class="btn btn-danger delete-button" type="submit">Удалить</button>
+                    </form>
+                    <form action="{{ url_for('todo_list.task_completed', todo_id=todo_list.id) }}" method="post" style="display: inline;">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        <button class="btn btn-success complete-button" type="submit">Завершить</button>
+                    </form>
+                </div>
+                <div class="update-form mt-2" id="update-form-{{ task.id }}" style="display: none;">
+                    <form class="form-inline" action="{{ url_for('todo_list.task_update', todo_id=todo_list.id, task_id=task.id) }}" method="post">
+                        <div class="form-group mr-2">
+                            <input type="text" class="form-control" name="title" placeholder="Новое название" value="{{ task.title }}">
+                        </div>
+                        <div class="form-group mr-2">
+                            <input type="text" class="form-control" name="description" placeholder="Новое описание" value="{{ task.description }}">
+                        </div>
+                        <input type="hidden" name="id" value="{{ task.id }}">
+                        <button class="btn btn-primary" type="submit">Обновить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Пока нет ни одной задачи в этом списке.</p>
+    {% endif %}
+</div>
+
+<div class="container mt-4">
+    <h2>Добавить новую задачу:</h2>
+    <form action="{{ url_for('todo_list.task_add', todo_id=todo_list.id) }}" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" name="title" placeholder="Название">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="description" placeholder="Описание">
+        </div>
+        <div class="form-group">
+            <input type="datetime-local" class="form-control" name="deadline_date" placeholder="Дедлайн">
+        </div>
+        <button type="submit" class="btn btn-success">Добавить</button>
+    </form>
+</div>
+
+<script>
+    const editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const taskId = button.getAttribute('data-task-id');
+            const updateForm = document.getElementById(`update-form-${taskId}`);
+            if (updateForm.style.display === 'none') {
+                updateForm.style.display = 'block';
+            } else {
+                updateForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

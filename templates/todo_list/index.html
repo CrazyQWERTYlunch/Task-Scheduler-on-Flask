@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-4">Списки задач</h1>
+    {% if todo_lists %}
+    <div class="card-container">
+        {% for todo_list in todo_lists %}
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ url_for('todo_list.get_todo', todo_id=todo_list.id) }}" style="text-decoration: none; color: inherit;">
+                    <h5 class="card-title">{{ todo_list.title }}</h5>
+                </a>                
+                <div class="card-buttons">
+                    <button class="btn btn-info edit-button" data-todo-id="{{ todo_list.id }}">Редактировать</button>
+                    <form action="{{ url_for('todo_list.todo_delete', todo_id=todo_list.id) }}" method="post">
+                        <button class="btn btn-danger delete-button" type="submit">Удалить</button>
+                    </form>
+                </div>
+            </div>
+            <div class="update-form" id="update-form-{{ todo_list.id }}" style="display: none;">
+                <form class="form-inline" action="{{ url_for('todo_list.todo_update', todo_id=todo_list.id) }}" method="post">
+                    <div class="form-group mb-2 text-center">
+                        <input type="text" class="form-control" name="title" placeholder="Введите новое название" required>
+                    </div>
+                    <button type="submit" class="btn btn-info mb-2 ml-2">Обновить</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2>Пока нет ни одного списка задач.</h2>
+    {% endif %}
+</div>
+
+<div class="container mt-4">
+    <h2>
+        <button class="btn btn-success" id="create-todo-btn">Создать новый список задач</button>
+    </h2>
+    <form id="create-todo-form" action="{{ url_for('todo_list.todo_add') }}" method="post" style="display: none;">
+        <div class="form-group text-center">
+            <input type="text" class="form-control" name="title" placeholder="Введите название" style="width: 50%; margin: 0 auto;">
+        </div>
+        <button type="submit" class="btn btn-success">Добавить</button>
+    </form>
+</div>
+{% endblock %}
